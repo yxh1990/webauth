@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>后台管理系统</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/static/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="/static/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="/static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="/static/dist/css/fileinput.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <style>
+        #div1{
+            height: 92%;
+            width: 200px;
+            position: absolute;
+            top:8%;
+            right:2px;
+            overflow: hidden;
+            background-color: #f8f8f8;
+            display: none;
+        }
+        .dataline{
+            margin-top: 10px;
+            line-height: 20px;
+            font-size: 15px;
+            margin-left: 15px;
+            font-weight:bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">后台管理系统</a>
+            </div>
+
+             <ul class="nav navbar-top-links navbar-right" style="margin-right: 70px;margin-top: 20px">
+                 <a href="#" style="font-size: 15px" data-toggle="modal" data-target="#myModal">欢迎你: <span id="username"></span></a>
+            </ul>
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div style="text-align:center;margin:15px;font-weight:bold;" id="sitename"></div>
+          <div class="row" style="margin-top:5px;margin-bottom:30px" id="row">
+          </div>
+
+            <div id="div1">
+
+            </div>
+            <div id="container0" style="width:75%; height:180px; margin:0"></div>
+            <div id="container1" style="width:75%; height:180px; margin:0"></div>
+            <div id="container2" style="width:75%; height:180px; margin:0"></div>
+            <div id="container3" style="width:75%; height:180px; margin:0"></div>
+            <div id="container4" style="width:75%; height:180px; margin:0"></div>
+            <div id="container5" style="width:75%; height:180px; margin:0"></div>
+     </div>
+
+                <!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">×
+				</button>
+				<h4 class="modal-title" id="myModalLabel">
+					修改密码
+				</h4>
+			</div>
+			<div class="modal-body">
+				<form class="bs-example bs-example-form" role="form">
+                  <div class="input-group">
+                     <span class="input-group-addon">原密码</span>
+                     <input type="password" class="form-control" placeholder="原密码">
+                </div>
+                 <div class="input-group">
+                     <span class="input-group-addon">新密码</span>
+                     <input id="newpasswd" type="password" class="form-control" placeholder="新密码">
+                </div>
+                 <div class="input-group">
+                     <span class="input-group-addon">确认新密码</span>
+                     <input type="password" class="form-control" placeholder="确认新密码">
+                </div>
+            </form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">
+                    关闭
+				</button>
+				<button type="button" class="btn btn-primary" onclick="updateuserpasswd()">
+					提交更改
+				</button>
+			</div>
+		</div><!-- /.modal-content -->
+	</div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+        <!-- /#page-wrapper -->
+      <div style="text-align:center">版权所有@2018.后台管理系统</div>
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/static/vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="/static/dist/js/fileinput.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="/static/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="/static/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="/static/vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/static/dist/js/sb-admin-2.js"></script>
+    <script  src="/static/js/config.js"></script>
+    <script  src="/static/js/util.js"></script>
+    <script  src="/static/js/jquery.tmpl.js"></script>
+    <script  src="/static/js/jquery.cookie.js"></script>
+    <script  src="/static/js/highcharts.js"></script>
+    <script type="text/x-jquery-tmpl" id="cabinets">
+      {{each(i,da) sites}}
+          <div class="col-sm-6 col-md-3" style="height:150px;width:150px">
+            <div class="thumbnail">
+             <img src="/static/images/gz2.png" alt="缩略图" onclick="showdata('${da.guizi}')" style="cursor:pointer;">
+              <div class="caption" style="text-align:center;padding:0px">
+                <p>${da.guizi}</p>
+                <!-- <p>
+                    {{each(i,item) da.items}}
+                    {{if i%3 ==0}}
+                       <a href="#" class="btn btn-danger" role="button" style="margin-top:5px">
+                    {{else i%3==1}}
+                       <a href="#" class="btn btn-success" role="button" style="margin-top:5px">
+                    {{else i%3==2}}
+                       <a href="#" class="btn btn-primary" role="button" style="margin-top:5px">
+                     {{/if}}
+                        ${item.po} ${item.pv}
+                      </a>
+                    {{/each}}
+                </p>
+                !-->
+            </div>
+        </div>
+    </div>
+      {{/each}}
+   </script>
+
+ <script language="JavaScript">
+
+    var result={"code":0,"msg":"","data":{"name":"shijiazhuang","items":[{"address":0,"temperature":0.95021677},{"address":1,"temperature":0.9684535},{"address":2,"temperature":0.6903352},{"address":3,"temperature":0.5211704},{"address":4,"temperature":0.5805385},{"address":5,"temperature":0.12590617},{"address":6,"temperature":0.9681979},{"address":7,"temperature":0.48218328},{"address":8,"temperature":0.9404652},{"address":9,"temperature":0.4245131},{"address":10,"temperature":0.045440197},{"address":11,"temperature":0.8905973},{"address":12,"temperature":0.8856429},{"address":13,"temperature":0.12550926},{"address":14,"temperature":0.33441955}]}}
+
+    Highcharts.setOptions({
+		global: {
+				useUTC: false
+		}
+     });
+    function activeLastPointToolip(chart)
+    {
+		  var points = chart.series[0].points;
+		  chart.tooltip.refresh(points[points.length -1]);
+    }
+    //var chart = Highcharts.chart('container0', {
+     Highcharts.chart('container0', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.random();          // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '上A实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}())
+		}]
+     });
+
+     Highcharts.chart('container1', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.random();          // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '下A实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: Math.random()
+								});
+						}
+						return data;
+				}())
+		}]
+     });
+
+     Highcharts.chart('container2', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.random();          // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '上B实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: Math.random()
+								});
+						}
+						return data;
+				}())
+		}]
+     });
+
+     Highcharts.chart('container3', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.random();          // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '下B实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}())
+		}]
+     });
+
+     Highcharts.chart('container4', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.random();          // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '上C实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}())
+		}]
+     });
+
+     Highcharts.chart('container5', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.random();          // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '下C实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}())
+		}]
+     });
+
+    </script>
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+   var restapi ="http://"+RestConfig.restip+":"+RestConfig.restport;
+   var sitedata;
+   function getsites(sitename)
+   {
+      $.ajax({
+          url:restapi+'/site',
+          type:'GET',
+          dataType:'json',
+          crossDomain: true,
+          xhrFields: {
+             withCredentials: true
+          },
+          success:function(data)
+          {
+              for(var i=0;i<data.sites.length;i++)
+              {
+                  if (data.sites[i]["name"] == sitename)
+                  {
+                      sitedata = data.sites[i];
+                    $("#cabinets").tmpl({"sites":sitedata["data"]}).appendTo('#row');
+                      //console.log(sitedata);
+                  }
+              }
+             $('#dataTables-example').DataTable({
+                responsive: true
+             });
+          },
+          error:function()
+          {
+              alert("获取数据异常");
+          }
+       });
+    }
+
+    $(document).ready(function() {
+        var sitename = getQueryString("sitename");
+        $("#sitename").html(sitename);
+        getsites(sitename);
+        getusernavhtml();
+        $(".highcharts-credits").hide();
+    });
+
+    function loadnavcallback()
+    {
+     $("#navul").children().eq(0).css("background-color","#eeeeee");
+    }
+    function showdata(guizi)
+    {
+        var guiziarray=sitedata["data"];
+        for (var t=0;t<guiziarray.length;t++)
+        {
+            if(guiziarray[t].guizi==guizi)
+            {
+              guizidata=guiziarray[t]["items"];
+            }
+        }
+        //console.log(guizidata);
+        var initbutton=" &nbsp;<button type=\"button\" class=\"btn btn-info\" style='width:100%;margin-bottom:3px' onclick=\"closeright()\" >隐藏详细</button><button type=\"button\" class=\"btn btn-danger\" style='width:100%' >"+name+"监控信息</button>";
+        var datahtml="";
+        for(var i=0;i<guizidata.length;i++)
+        {
+           //datahtml+="<p class='dataline'>"+guizidata[i]["po"]+":&nbsp;&nbsp;"+guizidata[i]["pv"]+"</p>"
+           datahtml+="<p class='dataline'>"+guizidata[i]["po"]+":&nbsp;&nbsp;"+Math.floor(Math.random()*100+1)+"°C</p>"
+        }
+        $("#div1").html(initbutton+datahtml);
+        $("#div1").show();
+    }
+    function showdatabak(img)
+    {
+        var tags = $(img).attr("tags");
+        var name =$(img).attr("tagname");
+        tags = tags.split(",");
+        var initbutton=" &nbsp;<button type=\"button\" class=\"btn btn-info\" style='width:100%;margin-bottom:3px' onclick=\"closeright()\" >隐藏详细</button><button type=\"button\" class=\"btn btn-danger\" style='width:100%' >"+name+"监控信息</button>";
+        var datahtml="";
+        for(var i=0;i<tags.length;i++)
+        {
+           datahtml+="<p class='dataline'>"+tags[i]+":&nbsp;&nbsp;"+Math.floor(Math.random()*100+1);+"</p>"
+        }
+        $("#div1").html(initbutton+datahtml);
+        $("#div1").show();
+    }
+
+    function closeright()
+    {
+         $("#div1").empty();
+         $("#div1").hide();
+    }
+
+    </script>
+</body>
+
+</html>
