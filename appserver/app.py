@@ -36,6 +36,14 @@ def login():
 	m.loginmsg="登录失败"
 	return redirect("/")
 
+
+@app.route("/logout",methods=["GET"])
+def logout():
+	session.pop('user')  # 删除session
+	session.clear()      # 清除所有session
+	return redirect("/")
+
+
 @app.route('/site',methods=['GET'])
 def get_sites():
 	sites = userhandler.get_sitesexcelfile()
