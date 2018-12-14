@@ -198,6 +198,80 @@
 								setInterval(function () {
 										var x = (new Date()).getTime(), // 当前时间
 												y = Math.round(Math.random()*100);          // 随机值
+
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '上A实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}()),
+             zones:
+                 [
+                    {
+                         value: 80, //80度以下
+                         color: '#90ed7d',
+                     },
+                     {
+                         value: 90, //80-90度以下
+                         color: '#f7a35c',
+                     },
+                     {
+                         value: 200,  //90-200度以下
+                         color: '#FF0000',
+                     }
+                 ]
+		}]
+     });
+
+     Highcharts.chart('container1', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.round(Math.random()*100);          // 随机值
+
 										series.addPoint([x, y], true, true);
 										//activeLastPointToolip(chart);
 								}, 1000);
@@ -244,91 +318,19 @@
              zones:
                  [
                      {
-                         value: 80,
+                         value: 80, //80度以下
                          color: '#90ed7d',
                      },
                      {
-                         value: 90,
+                         value: 90, //80-90度以下
                          color: '#f7a35c',
                      },
                      {
-                         value: 100,
+                         value: 200,  //90-200度以下
                          color: '#FF0000',
                      }
                  ]
 		}]
-     });
-
-     Highcharts.chart('container1', {
-         chart: {
-             type: 'spline',
-             marginRight: 10,
-             events: {
-                 load: function () {
-                     var series = this.series[0], chart = this;
-                     //activeLastPointToolip(chart);
-                     setInterval(function () {
-                         var x = (new Date()).getTime(), // 当前时间
-                             y = Math.round(Math.random() * 100);           // 随机值
-                         series.addPoint([x, y], true, true);
-                         //activeLastPointToolip(chart);
-                     }, 1000);
-                 }
-             }
-         },
-         title: {
-             text: '下A实时温度显示'
-         },
-         xAxis: {
-             type: 'datetime',
-             tickPixelInterval: 150
-         },
-         yAxis: {
-             title: {
-                 text: null
-             }
-         },
-         tooltip: {
-             formatter: function () {
-                 return '<b>' + this.series.name + '</b><br/>' +
-                     Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
-                     Highcharts.numberFormat(this.y, 2);
-             }
-         },
-         legend: {
-             enabled: false
-         },
-         series: [{
-             name: '温度',
-             data: (function () {
-                 // 生成随机值
-                 var data = [],
-                     time = (new Date()).getTime(),
-                     i;
-                 for (i = -19; i <= 0; i += 1) {
-                     data.push({
-                         x: time + i * 1000,
-                         y: Math.random()
-                     });
-                 }
-                 return data;
-             }()),
-             zones:
-                 [
-                     {
-                         value: 80,
-                         color: '#90ed7d',
-                     },
-                     {
-                         value: 90,
-                         color: '#f7a35c',
-                     },
-                     {
-                         value: 100,
-                         color: '#FF0000',
-                     }
-                 ]
-         }]
      });
 
      Highcharts.chart('container2', {
@@ -388,15 +390,15 @@
               zones:
                  [
                      {
-                         value: 80,
+                         value: 80, //80度以下
                          color: '#90ed7d',
                      },
                      {
-                         value: 90,
+                         value: 90, //80-90度以下
                          color: '#f7a35c',
                      },
                      {
-                         value: 100,
+                         value: 200,  //90-200度以下
                          color: '#FF0000',
                      }
                  ]
@@ -460,15 +462,15 @@
               zones:
                  [
                      {
-                         value: 80,
+                         value: 80, //80度以下
                          color: '#90ed7d',
                      },
                      {
-                         value: 90,
+                         value: 90, //80-90度以下
                          color: '#f7a35c',
                      },
                      {
-                         value: 100,
+                         value: 200,  //90-200度以下
                          color: '#FF0000',
                      }
                  ]
@@ -531,16 +533,16 @@
 				}()),
               zones:
                  [
-                     {
-                         value: 80,
+                    {
+                         value: 80, //80度以下
                          color: '#90ed7d',
                      },
                      {
-                         value: 90,
+                         value: 90, //80-90度以下
                          color: '#f7a35c',
                      },
                      {
-                         value: 100,
+                         value: 200,  //90-200度以下
                          color: '#FF0000',
                      }
                  ]
@@ -603,16 +605,16 @@
 				}()),
               zones:
                  [
-                     {
-                         value: 80,
+                    {
+                         value: 80, //80度以下
                          color: '#90ed7d',
                      },
                      {
-                         value: 90,
+                         value: 90, //80-90度以下
                          color: '#f7a35c',
                      },
                      {
-                         value: 100,
+                         value: 200,  //90-200度以下
                          color: '#FF0000',
                      }
                  ]
@@ -679,11 +681,10 @@
             }
         }
 
-        var initbutton=" &nbsp;<button type=\"button\" class=\"btn btn-info\" style='width:100%;margin-bottom:3px' onclick=\"closeright()\" >隐藏详细</button><button type=\"button\" class=\"btn btn-danger\" style='width:100%' >"+name+"监控信息</button>";
+        var initbutton="&nbsp;<button type=\"button\" class=\"btn btn-info\" style='width:100%;margin-bottom:3px' onclick=\"closeright()\" >隐藏详细</button><button type=\"button\" class=\"btn btn-danger\" style='width:100%' >"+name+"监控信息</button>";
         var datahtml="";
         for(var i=0;i<guizidata.length;i++)
         {
-           //datahtml+="<p class='dataline'>"+guizidata[i]["po"]+":&nbsp;&nbsp;"+guizidata[i]["pv"]+"</p>"
             var temp=Math.floor(Math.random()*100+1);
             if (temp > 85)
             {

@@ -5,6 +5,7 @@
 from app import app 
 from main.dbutils import dbtool
 
+
 db = dbtool()
 db.init_db()
 
