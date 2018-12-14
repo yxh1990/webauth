@@ -1,0 +1,62 @@
+sites:
+  - name: "车田22kv变电站"
+    cabinets:
+      - name: "001柜"
+        numbers:
+          - 上A
+          - 上B
+          - 上C
+          - 下A
+          - 下B
+          - 下C
+      - name: "002柜"
+        numbers:
+          - 上A
+          - 下B
+      - name: "003柜"
+        numbers:
+          - 上A
+          - 上B
+          - 上C
+          - 下A
+          - 下C
+      - name: "004柜"
+        numbers:
+          - 上A
+          - 上A
+      - name: "005柜"
+        numbers:
+          - 上A
+          - 上A
+          - 上B
+          - 上B
+          - 上B
+          - 上A
+      - name: "006柜"
+        numbers:
+          - 上A
+          - 上B
+  - name: "王村110KV站"
+    cabinets:
+      - name: "001柜"
+        numbers:
+          - A1
+          - B2
+          - C2
+      - name: "002柜"
+        numbers:
+          - A3
+          - B5
+          - C6
+  - name: "李村110KV站"
+    cabinets:
+      - name: "001柜"
+        numbers:
+          - A1
+          - B2
+          - C2
+      - name: "002柜"
+        numbers:
+          - A3
+          - B5
+          - C6
