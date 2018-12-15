@@ -39,8 +39,8 @@ input[type=submit], input[type=button] { display: inline-block; vertical-align: 
                <p>后台管理系统</p>
           </div>
           <form method="post" action="/login" autocomplete="off">
-              <input name="loginuser" type="text" placeholder="用户名" autocomplete="off" />
-              <input name="loginpwd" type="password" id="password"  placeholder="密码" />
+              <input name="loginuser" type="text" placeholder="用户名" autocomplete="off"  maxlength="20" />
+              <input name="loginpwd" type="password" id="password"  placeholder="密码" maxlength="20" />
               <input value="登录" style="width:100%;" type="submit">
           </form>
           <div style="text-align: center;width: 300px;padding-top: 18px">
