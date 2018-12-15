@@ -28,6 +28,7 @@
 
     <!-- Custom Fonts -->
     <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/static/dist/css/bootstrapValidator.min.css" rel="stylesheet">
 
 </head>
 
@@ -88,7 +89,7 @@
             </div>
         </div>
 
-        <!-- 模态框（Modal） -->
+      <!-- 模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -101,23 +102,29 @@
 				</h4>
 			</div>
 			<div class="modal-body">
-				<form class="bs-example bs-example-form" role="form">
-                  <div class="input-group">
-                     <span class="input-group-addon">原密码</span>
-                     <input type="password" class="form-control" placeholder="原密码">
-                </div>
-                 <div class="input-group">
-                     <span class="input-group-addon">新密码</span>
-                     <input id="newpasswd" type="password" class="form-control" placeholder="新密码">
-                </div>
-                 <div class="input-group">
-                     <span class="input-group-addon">确认新密码</span>
-                     <input type="password" class="form-control" placeholder="确认新密码">
-                </div>
-            </form>
+				<form id="updatepasswdForm" method="post" class="form-horizontal">
+                   <div class="form-group">
+                            <label class="col-lg-3 control-label">原密码</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="oldpasswd" id="oldpasswd" maxlength="20" />
+                            </div>
+                        </div>
+                    <div class="form-group">
+                            <label class="col-lg-3 control-label">新密码</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="newpasswd" id="newpasswd"  maxlength="20" />
+                            </div>
+                    </div>
+                     <div class="form-group">
+                            <label class="col-lg-3 control-label">确认新密码</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="newconfirmPassword" id="newconfirmPassword"  maxlength="20" />
+                            </div>
+                    </div>
+                </form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">
+				<button type="button" class="btn btn-default" onclick="reloadpage()">
                     关闭
 				</button>
 				<button type="button" class="btn btn-primary" onclick="updateuserpasswd()">
@@ -126,7 +133,7 @@
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div>
 
    <!-- 模态框（Modal） -->
 <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -141,26 +148,38 @@
 				</h4>
 			</div>
 			<div class="modal-body">
-				<form class="bs-example bs-example-form" role="form">
-                  <div class="input-group">
-                     <span class="input-group-addon">用户名</span>
-                     <input id="newuser" type="text" class="form-control" placeholder="用户名">
-                </div>
-                 <div class="input-group">
-                     <span class="input-group-addon">密&nbsp;&nbsp;&nbsp;码</span>
-                     <input id="addnewpasswd" type="password" class="form-control" placeholder="密码">
-                </div>
-                 <div class="input-group">
-                     <span class="input-group-addon">用户类型</span>
-                      <select  class="form-control" data-style="btn-info" id="newtype">
-                          <option value="0">普通用户</option>
-　　　　                  <option value="1">管理员</option>
-                      </select>
-                </div>
-            </form>
+				<form id="defaultForm" method="post" class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">用户名</label>
+                            <div class="col-lg-5">
+                                <input type="text" class="form-control" id="username_input" name="username"  maxlength="15"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">密码</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="addpassword" id="addpassword" maxlength="20" />
+                            </div>
+                        </div>
+                       <div class="form-group">
+                            <label class="col-lg-3 control-label">确认密码</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="confirmPassword" id="confirmPassword"  maxlength="20" />
+                            </div>
+                       </div>
+                        <div class="form-group">
+                            <label class="col-lg-3 control-label">用户类型</label>
+                            <div class="col-lg-5">
+                                <select  class="form-control" data-style="btn-info" id="newtype">
+                                   <option value="0">普通用户</option>
+　　　　                           <option value="1">管理员</option>
+                               </select>
+                            </div>
+                       </div>
+                </form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">
+				<button type="button" class="btn btn-default" onclick="reloadpage()">
                     关闭
 				</button>
 				<button type="button" class="btn btn-primary" onclick="addnewuser()">
@@ -178,8 +197,10 @@
     <!-- jQuery -->
     <script src="/static/vendor/jquery/jquery.min.js"></script>
 
+
     <!-- Bootstrap Core JavaScript -->
     <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/dist/js/bootstrapValidator.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="/static/vendor/metisMenu/metisMenu.min.js"></script>
@@ -192,6 +213,7 @@
     <!-- Custom Theme JavaScript -->
     <script src="/static/dist/js/sb-admin-2.js"></script>
     <script  src="/static/js/config.js"></script>
+    <script  src="/static/js/util.js"></script>
     <script  src="/static/js/jquery.tmpl.js"></script>
     <script type="text/x-jquery-tmpl" id="sites">
      {{each(i,da) users}}
@@ -243,60 +265,125 @@
          }
      }
 
-    function getusers()
-   {
-      $.ajax({
-          url:restapi+'/users',
-          type:'GET',
-          dataType:'json',
-          crossDomain: true,
-          xhrFields: {
-             withCredentials: true
-          },
-          success:function(data)
-          {
-             $("#sites").tmpl(data).appendTo('#tblist');
-             $('#dataTables-example').DataTable({
-                responsive: true
-             });
-          },
-          error:function()
-          {
-              alert("获取数据异常");
-          }
-       });
-    }
+     function getusers()
+     {
+          $.ajax({
+              url:restapi+'/users',
+              type:'GET',
+              dataType:'json',
+              crossDomain: true,
+              xhrFields: {
+                 withCredentials: true
+              },
+              success:function(data)
+              {
+                 $("#sites").tmpl(data).appendTo('#tblist');
+                 $('#dataTables-example').DataTable({
+                    responsive: true
+                 });
+              },
+              error:function()
+              {
+                  alert("获取数据异常");
+              }
+           });
+     }
 
     function addnewuser()
     {
-        var username=$("#newuser").val();
-        var userpass=$("#addnewpasswd").val();
-        var usertype=$("#newtype").val();
+         $("#defaultForm").bootstrapValidator('validate'); //提交表单验证
+         var res=$("#defaultForm").data('bootstrapValidator').isValid(); //获取验证结果
+         if(res)
+         {
+             var username = $("#username_input").val();
+             var userpass = $("#addpassword").val();
+             var usertype = $("#newtype").val();
 
-        $.ajax({
-             url: restapi + '/adduser',
-             crossDomain: true,
-             xhrFields: {
-               withCredentials: true
-             },
-             data:{username:username,userpass:userpass,usertype:usertype},
-             type: 'POST',
-             success: function () {
-               alert("添加用户成功");
-               $("#myModal2").modal('hide');
-               $(".modal-backdrop").hide();
-               window.location.reload();
-             },
-             error: function () {
-               alert("添加用户失败");
-             }
-         });
+             $.ajax({
+                 url: restapi + '/adduser',
+                 crossDomain: true,
+                 xhrFields: {
+                     withCredentials: true
+                 },
+                 data: {username: username, userpass: userpass, usertype: usertype},
+                 type: 'POST',
+                 success: function () {
+                     alert("添加用户成功");
+                     $("#myModal2").modal('hide');
+                     $(".modal-backdrop").hide();
+                     window.location.reload();
+                 },
+                 error: function () {
+                     alert("添加用户失败");
+                 }
+             });
+         }
     }
 
     $(document).ready(function() {
         getusers();
         getusernavhtml();
+        validatesettings();
+        setupdatepasswdvalidate();
     });
+
+     function validatesettings()
+     {
+         $('#defaultForm').bootstrapValidator({
+             message: '验证失败',
+             feedbackIcons: {
+                 valid: 'glyphicon glyphicon-ok',
+                 invalid: 'glyphicon glyphicon-remove',
+                 validating: 'glyphicon glyphicon-refresh'
+             },
+             fields: {
+                username: {
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 15,
+                            message: '用户名的长度必须在6-15个字符之间'
+                        },
+                        regexp: {
+                            regexp: /^[a-zA-Z0-9_\.]+$/,
+                            message: '用户名不能包含特殊字符'
+                        }
+                    }
+                },
+                addpassword: {
+                    validators: {
+                        notEmpty: {
+                            message: '密码不能为空'
+                        },
+                        stringLength: {
+                            min: 6,
+                            max: 15,
+                            message: '密码的长度必须在6-15个字符之间'
+                        },
+                        identical: {
+                            field: 'confirmPassword',
+                            message: '和确认密码输入的内容不一致'
+                        }
+                    }
+                },
+                confirmPassword: {
+                    validators: {
+                        notEmpty: {
+                            message: '确认密码不能为空'
+                        },
+                        identical: {
+                            field: 'addpassword',
+                            message: '和密码输入的不一致'
+                        }
+                    }
+                }
+            }
+        });
+     }
+
     function loadnavcallback()
     {
         $("#navul").children().eq(2).css("background-color","#eeeeee");

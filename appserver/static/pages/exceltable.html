@@ -13,6 +13,7 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+     <link href="/static/dist/css/bootstrapValidator.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
     <link href="/static/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
@@ -91,7 +92,6 @@
             <div id="container5" style="width:75%; height:180px; margin:0"></div>
      </div>
 
-                <!-- 模态框（Modal） -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -104,23 +104,29 @@
 				</h4>
 			</div>
 			<div class="modal-body">
-				<form class="bs-example bs-example-form" role="form">
-                  <div class="input-group">
-                     <span class="input-group-addon">原密码</span>
-                     <input type="password" class="form-control" placeholder="原密码">
-                </div>
-                 <div class="input-group">
-                     <span class="input-group-addon">新密码</span>
-                     <input id="newpasswd" type="password" class="form-control" placeholder="新密码">
-                </div>
-                 <div class="input-group">
-                     <span class="input-group-addon">确认新密码</span>
-                     <input type="password" class="form-control" placeholder="确认新密码">
-                </div>
-            </form>
+				<form id="updatepasswdForm" method="post" class="form-horizontal">
+                   <div class="form-group">
+                            <label class="col-lg-3 control-label">原密码</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="oldpasswd" id="oldpasswd" maxlength="20" />
+                            </div>
+                        </div>
+                    <div class="form-group">
+                            <label class="col-lg-3 control-label">新密码</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="newpasswd" id="newpasswd"  maxlength="20" />
+                            </div>
+                    </div>
+                     <div class="form-group">
+                            <label class="col-lg-3 control-label">确认新密码</label>
+                            <div class="col-lg-5">
+                                <input type="password" class="form-control" name="newconfirmPassword" id="newconfirmPassword"  maxlength="20" />
+                            </div>
+                    </div>
+                </form>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">
+				<button type="button" class="btn btn-default" onclick="reloadpage()">
                     关闭
 				</button>
 				<button type="button" class="btn btn-primary" onclick="updateuserpasswd()">
@@ -129,7 +135,7 @@
 			</div>
 		</div><!-- /.modal-content -->
 	</div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+</div>
         <!-- /#page-wrapper -->
       <div style="text-align:center">版权所有@2018.后台管理系统</div>
     </div>
@@ -140,6 +146,7 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/dist/js/bootstrapValidator.min.js"></script>
 
     <!-- Metis Menu Plugin JavaScript -->
     <script src="/static/vendor/metisMenu/metisMenu.min.js"></script>
@@ -663,6 +670,7 @@
         $("#sitename").html(sitename);
         getsites(sitename);
         getusernavhtml();
+        setupdatepasswdvalidate();
         $(".highcharts-credits").hide();
     });
 

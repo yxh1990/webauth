@@ -44,23 +44,4 @@ function getusernavhtml()
 }
 
 
-function updateuserpasswd()
-{
-   $.ajax({
-             url: restapi + '/updateuserpasswd',
-             crossDomain: true,
-             xhrFields: {
-               withCredentials: true
-             },
-             data:{newpwd:$("#newpasswd").val()},
-             type: 'POST',
-             success: function () {
-               alert("修改密码成功");
-               $("#myModal").modal('hide');
-               $(".modal-backdrop").hide();
-             },
-             error: function () {
-               alert("修改密码失败");
-             }
-         });
-}
+
