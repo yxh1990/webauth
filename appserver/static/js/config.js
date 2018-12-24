@@ -35,6 +35,7 @@ function getusernavhtml()
                 getusernavhtml2();
              }
              $("#username").html(user["username"]);
+             $("#days").html("密码剩余有效天数:<font color='orange' size='3px'>"+user["redays"]+"</font>");
           },
           error:function()
           {

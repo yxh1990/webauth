@@ -61,8 +61,10 @@
             </div>
 
             <ul class="nav navbar-top-links navbar-right" style="margin-right: 80px;margin-top: 20px">
-                <a href="#" style="font-size: 15px" data-toggle="modal" data-target="#myModal">欢迎你: <span id="username"></span></a>
-                  &nbsp;&nbsp;
+                <a href="#" style="font-size: 15px" data-toggle="modal" data-target="#myModal">欢迎你: <span id="username"></span></a>&nbsp;
+                 &nbsp;&nbsp;&nbsp;
+                <span id="days"></span>
+                                    &nbsp;&nbsp;
                   <a href="/logout" style="color:red">退出登录</a>
             </ul>
 
@@ -678,6 +680,8 @@
     {
      $("#navul").children().eq(0).css("background-color","#eeeeee");
     }
+
+    timer="";
     function showdata(guizi)
     {
         var guiziarray=sitedata["data"];
@@ -705,6 +709,12 @@
         }
         $("#div1").html(initbutton+datahtml);
         $("#div1").show();
+
+        if(timer)
+        {
+          window.clearInterval(timer);
+        }
+        timer=setInterval(showdata,1000,guizi);
     }
     function showdatabak(img)
     {

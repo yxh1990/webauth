@@ -43,7 +43,8 @@
 
             <ul class="nav navbar-top-links navbar-right" style="margin-right: 80px;margin-top: 20px">
                 <a href="#" style="font-size: 15px" data-toggle="modal" data-target="#myModal">欢迎你: <span id="username"></span></a>
-                  &nbsp;&nbsp;
+                  &nbsp; <span id="days"></span>
+                    &nbsp;&nbsp;
                   <a href="/logout" style="color:red">退出登录</a>
             </ul>
 
@@ -307,7 +308,7 @@
                  },
                  data: {username: username, userpass: userpass, usertype: usertype},
                  type: 'POST',
-                 success: function () {
+                 success: function (data) {
                      alert("添加用户成功");
                      $("#myModal2").modal('hide');
                      $(".modal-backdrop").hide();
@@ -343,9 +344,9 @@
                             message: '用户名不能为空'
                         },
                         stringLength: {
-                            min: 6,
-                            max: 15,
-                            message: '用户名的长度必须在6-15个字符之间'
+                            min: 8,
+                            max: 20,
+                            message: '用户名的长度必须在8-20个字符之间'
                         },
                         regexp: {
                             regexp: /^[a-zA-Z0-9_\.]+$/,
@@ -359,9 +360,13 @@
                             message: '密码不能为空'
                         },
                         stringLength: {
-                            min: 6,
-                            max: 15,
-                            message: '密码的长度必须在6-15个字符之间'
+                            min: 8,
+                            max: 20,
+                            message: '密码的长度必须在8-20个字符之间'
+                        },
+                         regexp: {
+                            regexp: /^.*(?=.{8,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/,
+                            message: '最少8位,至少包含1个大小写字母,1个数字,1个特殊字符'
                         },
                         identical: {
                             field: 'confirmPassword',

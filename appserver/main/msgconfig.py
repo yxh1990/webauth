@@ -1,1 +1,2 @@
 loginmsg=""
+count=0

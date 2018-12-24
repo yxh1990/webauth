@@ -26,9 +26,9 @@ function setupdatepasswdvalidate()
                             message: '原密码不能为空'
                         },
                         stringLength: {
-                            min: 6,
-                            max: 15,
-                            message: '长度必须在6-15个字符之间'
+                            min: 8,
+                            max: 20,
+                            message: '长度必须在8-20个字符之间'
                         }
                     }
                 },
@@ -38,9 +38,9 @@ function setupdatepasswdvalidate()
                             message: '密码不能为空'
                         },
                         stringLength: {
-                            min: 6,
-                            max: 15,
-                            message: '密码的长度必须在6-15个字符之间'
+                            min: 8,
+                            max: 20,
+                            message: '密码的长度必须在8-20个字符之间'
                         },
                         identical: {
                             field: 'newconfirmPassword',

@@ -9,7 +9,6 @@ import yaml
 import xlrd
 
 
-
 def checkuser(username,password):
 	userdb=usertable()
 	res=userdb.user_query("name='%s' and passwd='%s'" %(username,password))

@@ -1,7 +1,6 @@
 import sqlite3
 import os
 
-
 class dbtool:
 
     def get_dbfile(self):
@@ -62,6 +61,9 @@ class usertable():
 
     def user_del(self,username):
         cursor = self.conn.cursor()
+        if username == "admin":
+            return False
+
         cursor.execute("delete from user_info where name='%s'" %username)
         cursor.close()
         self.conn.commit()

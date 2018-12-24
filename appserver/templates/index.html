@@ -39,14 +39,50 @@ input[type=submit], input[type=button] { display: inline-block; vertical-align: 
                <p>后台管理系统</p>
           </div>
           <form method="post" action="/login" autocomplete="off">
-              <input name="loginuser" type="text" placeholder="用户名" autocomplete="off"  maxlength="20" />
-              <input name="loginpwd" type="password" id="password"  placeholder="密码" maxlength="20" />
-              <input value="登录" style="width:100%;" type="submit">
+              <input id="loginuser" name="loginuser" type="text" placeholder="用户名" autocomplete="off"  maxlength="20" />
+              <input id="loginpwd" name="loginpwd" type="password" id="password"  placeholder="密码"  maxlength="20" />
+              <input value="登录" style="width:100%;" type="submit" id="btn">
+              <input type="hidden" id="hidden_count" name="logincount" value="{{ count }}" />
           </form>
-          <div style="text-align: center;width: 300px;padding-top: 18px">
-              <font color="red">{{ msg }}</font>
+          <div style="text-align: center;width: 300px;padding-top:18px;color:red" id="divmsg">
+              {{ msg }}
          </div>
       </div>
 </div>
 </body>
+<script type="text/javascript">
+ var timer="";
+window.onload=function()
+{
+     var count=document.getElementById("hidden_count").value;
+     if(count>=5)
+     {
+         timer=setInterval(locklogin,1000);
+     }
+}
+
+var retime=120;
+function locklogin()
+{
+    if(retime>0)
+    {
+        document.getElementById("divmsg").innerHTML = "登录失败次数过多,系统已被锁定" + parseInt(retime--) + "秒";
+        document.getElementById("btn").disabled = true;
+        document.getElementById("loginuser").disabled = true;
+        document.getElementById("loginpwd").disabled = true;
+    }
+    else
+    {
+        document.getElementById("divmsg").innerHTML="请重新输入用户名和密码";
+        document.getElementById("btn").disabled = false;
+        document.getElementById("loginuser").disabled = false;
+        document.getElementById("loginpwd").disabled = false;
+
+        if(timer)
+        {
+          window.clearInterval(timer);
+        }
+    }
+}
+</script>
 </html>

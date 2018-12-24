@@ -2,15 +2,8 @@
 # -*- coding=utf8-*-
 #author yanxianghui
 
-from app import app 
-from main.dbutils import dbtool
-
-
-db = dbtool()
-db.init_db()
+from app import app
 
 if __name__ == "__main__":
-	db=dbtool()
-	db.init_db()
 	app.run("0.0.0.0")
 
