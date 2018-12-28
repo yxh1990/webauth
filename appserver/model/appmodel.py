@@ -8,6 +8,8 @@ class Userinfo(db.Model):
     passwd = db.Column(db.String(20),nullable=False)
     type =db.Column(db.Integer,nullable=False)
     usertime=db.Column(db.Date,nullable=False,default=date.today())
+    locktime=db.Column(db.DateTime,nullable=True)
+    failcount=db.Column(db.Integer,nullable=False,default=0)
 
     def __repr__(self):
         return '<User %r>' % self.name
@@ -17,8 +19,7 @@ class Userinfo(db.Model):
             'id': self.id,
             'name': self.name,
             'type': self.type,
-            'usertime': self.usertime.strftime("%Y-%m-%d"),
-            'aaa':"bbbbbb"
+            'usertime': self.usertime.strftime("%Y-%m-%d")
         }
         return jsonstr
 

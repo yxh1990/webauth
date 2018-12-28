@@ -12,11 +12,11 @@ from urllib.parse import unquote,quote
 import json
 
 from flask_sqlalchemy import SQLAlchemy
-from datetime import date
+from datetime import date,datetime
 from datetime import timedelta
+import time
 
 app = Flask(__name__)
-bootstrap = Bootstrap(app)
 app.debug = True
 
 
@@ -35,12 +35,15 @@ def main():
 	#打开登录页的时候进行数据库初始化
 	db.create_all()
 	users=Userinfo.query.filter_by(name='admin').first()
+	#users = Userinfo.query.filter_by(name='sjz-jx').first()
 	if not users:
 		admin=Userinfo(name='admin',passwd='admin',type=1)
+		#admin = Userinfo(name='sjz-jx', passwd='Sjzjx123$%^', type=1)
 		db.session.add(admin)
 		db.session.commit()
 	dict={}
 	dict["msg"]=m.loginmsg
+	dict["username"]=m.loginame
 	dict["count"]=m.count
 	return render_template('index.html',**dict)
 
@@ -51,19 +54,34 @@ def login():
 	logincount=request.form.get('logincount')
 	#result = userhandler.checkuser(loginame, loginpwd)
 	user = Userinfo.query.filter_by(name=loginame,passwd=loginpwd).first()
-
 	if user:
 		date1 = user.usertime
 		date2 = date.today()
-		tmpday = (date2 - date1).days
+		tmpday = (date2-date1).days
 		days = 60 - tmpday
 		session['user'] = {'user':loginame,'type':user.type,'days':days}
-		m.loginmsg=""
+		user.locktime=None
+		user.failcount=0
+		db.session.commit()
+		m.loginame=""
 		m.count=0
+		session.permanent = True
+		app.permanent_session_lifetime = timedelta(minutes=1)
 		return redirect("/index")
-	m.count = int(logincount) + 1
-	if m.count<5:
-		m.loginmsg="登录失败,还可以尝试%d次登录" %(5-m.count)
+
+	lockuser = Userinfo.query.filter_by(name=loginame).first()
+	if lockuser:
+		if lockuser.failcount>=2:
+			now_str = time.strftime("%Y-%m-%d %H:%M:%S")
+			lockuser.locktime= datetime.strptime(now_str, "%Y-%m-%d %H:%M:%S")
+		lockuser.failcount=lockuser.failcount+1
+		m.count=lockuser.failcount
+		db.session.commit()
+		m.loginmsg="%s已经登录失败%d次" %(loginame,lockuser.failcount)
+	else:
+		m.loginmsg="用户名%s错误,登录失败" %(loginame)
+		m.count=-1
+	m.loginame=loginame
 	return redirect("/")
 
 
@@ -191,6 +209,7 @@ def checkuser(username,userpass,usertype):
 def deluser():
 	username = request.form.get('username')
 	if username == "admin":
+	#if username == "sjz-jx":
 		return "0"
 
 	user = Userinfo.query.filter_by(name=username).first()
@@ -206,19 +225,46 @@ def get_users():
 	for user in users:
 		obj=user.jsonstr()
 		res.append(obj)
-	return jsonify({'users': res})
+	return jsonify({'users':res})
 
+@app.route('/getlocktime',methods=['GET'])
+def getlocktime():
+	username = request.args.get('username')
+	user = Userinfo.query.filter_by(name=username).first()
+	if user and user.locktime:
+		locktime=user.locktime.strftime("%Y-%m-%d %H:%M:%S")
+	else:
+		locktime=None
+	return jsonify({'username':username,'locktime':locktime})
+
+
+@app.before_first_request
+def process_first_request():
+	m.loginame=""
+	m.count=0
+	m.loginmsg=""
 
 @app.before_request
 def process_request():
-	if request.path == "/" or request.path== "/login":
-		return None
+	no_handler_paths=["/","/login","/getlocktime"]
+	if request.path in no_handler_paths:
+ 		return None
+	static_urls=["js","images"]
+	for str in static_urls:
+		if request.path.find(str):
+			return None
 	if not session.get("user"):
-		return redirect("/")
+	 	return redirect("/")
 
 @app.after_request
 def process_response(response):
 	response.headers["Access-Control-Allow-Credentials"]="true";
+	handlers=["/"]
+	if request.path in handlers:
+		m.loginame = ""
+		m.count = 0
+		m.loginmsg = ""
+
 	return response
 
 

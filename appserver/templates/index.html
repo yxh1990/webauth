@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
-<meta http-equiv="Pragma" content="no-cache"> 
-<meta http-equiv="Cache-Control" content="no-cache"> 
-<meta http-equiv="Expires" content="0"> 
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Cache-Control" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>后台管理</title>
 <style>
 * { font: 13px/1.5 '微软雅黑'; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; -box-sizing: border-box; padding:0; margin:0; list-style:none; box-sizing: border-box; }
@@ -12,7 +12,6 @@ body, html { height:100%; overflow:hidden; }
 body { background:#93defe; background-size: cover; }
 a { color:#27A9E3; text-decoration:none; cursor:pointer; }
 img{ border:none;}
-
 .login_box{ width:1100px; margin:120px auto 0;}
 .login_box .login_l_img{ float:left; width:432px; height:440px; margin-left:50px;}
 .login_box .login_l_img img{width:500px; height:440px; }
@@ -24,9 +23,7 @@ img{ border:none;}
 input[type=text], input[type=file], input[type=password], input[type=email], select { border: 1px solid #DCDEE0; vertical-align: middle; border-radius: 3px; height: 50px; padding: 0px 16px; font-size: 14px; color: #555555; outline:none; width:100%;margin-bottom: 15px;line-height:50px; color:#888;}
 input[type=submit], input[type=button] { display: inline-block; vertical-align: middle; padding: 12px 24px; margin: 0px; font-size:16px; line-height: 24px; text-align: center; white-space: nowrap; vertical-align: middle; cursor: pointer; color: #ffffff; background-color: #27A9E3; border-radius: 3px; border: none; -webkit-appearance: none; outline:none; width:100%; }
 .copyright { font-size:14px; color:#fff; display:block;width:100%; float:left; text-align:center; margin-top:60px;}
-
 #password_text{border: 1px solid #DCDEE0; vertical-align: middle; border-radius: 3px; height: 50px; padding: 0px 16px; font-size: 14px; color: #888; outline:none; width:100%;margin-bottom: 15px;display: block; line-height:50px;}
-
 </style>
 </head>
 
@@ -39,9 +36,9 @@ input[type=submit], input[type=button] { display: inline-block; vertical-align: 
                <p>后台管理系统</p>
           </div>
           <form method="post" action="/login" autocomplete="off">
-              <input id="loginuser" name="loginuser" type="text" placeholder="用户名" autocomplete="off"  maxlength="20" />
+              <input id="loginuser" name="loginuser" type="text" placeholder="用户名" autocomplete="off"  maxlength="20" onblur="checklockuser(this)" value="{{ username }}"/>
               <input id="loginpwd" name="loginpwd" type="password" id="password"  placeholder="密码"  maxlength="20" />
-              <input value="登录" style="width:100%;" type="submit" id="btn">
+              <input value="登录" style="width:100%;" type="submit" id="btn" />
               <input type="hidden" id="hidden_count" name="logincount" value="{{ count }}" />
           </form>
           <div style="text-align: center;width: 300px;padding-top:18px;color:red" id="divmsg">
@@ -50,39 +47,87 @@ input[type=submit], input[type=button] { display: inline-block; vertical-align: 
       </div>
 </div>
 </body>
-<script type="text/javascript">
- var timer="";
+ <!-- 静态文件只能存放到js目录下 并且以url_for的方式进行调用 -->
+ <script src={{url_for('static', filename='js/jquery.js')}}></script>
+ <script src={{url_for('static', filename='js/config.js')}}></script>
+<script>
 window.onload=function()
 {
-     var count=document.getElementById("hidden_count").value;
-     if(count>=5)
+     var username=$("#loginuser").val();
+     var failcount=$("#hidden_count").val();
+     if(!username)
      {
-         timer=setInterval(locklogin,1000);
+        document.getElementById("divmsg").innerHTML="";
+        document.getElementById("btn").disabled = false;
      }
-}
 
-var retime=120;
-function locklogin()
-{
-    if(retime>0)
+     //用户名存在而且failcount>2
+    if(!username)
     {
-        document.getElementById("divmsg").innerHTML = "登录失败次数过多,系统已被锁定" + parseInt(retime--) + "秒";
-        document.getElementById("btn").disabled = true;
-        document.getElementById("loginuser").disabled = true;
-        document.getElementById("loginpwd").disabled = true;
+        $("#loginuser").focus();
+    }
+    else if(failcount==-1) //用户名不存在
+    {
+       $("#loginuser").focus();
+    }
+    else if(username && failcount>2)
+    {
+        $("#loginuser").focus();
     }
     else
     {
-        document.getElementById("divmsg").innerHTML="请重新输入用户名和密码";
-        document.getElementById("btn").disabled = false;
-        document.getElementById("loginuser").disabled = false;
-        document.getElementById("loginpwd").disabled = false;
-
-        if(timer)
-        {
-          window.clearInterval(timer);
-        }
+        $("#loginpwd").focus();
     }
+
+}
+function locklogin(username,retime)
+{
+    if(retime<3) //锁定时间小于2个小时禁止对应的用户登录
+    {
+        document.getElementById("divmsg").innerHTML = "登录失败次数过多,"+username+"已被锁定2小时";
+        document.getElementById("btn").disabled = true;
+        $("#loginuser").focus();
+    }
+    else
+    {
+        document.getElementById("divmsg").innerHTML="";
+        document.getElementById("btn").disabled = false;
+    }
+}
+
+function checklockuser(ele)
+{
+    var username=ele.value;
+    $.ajax({
+             url: restapi + '/getlocktime',
+             crossDomain: true,
+             xhrFields: {
+               withCredentials: true
+             },
+             data:{username:username},
+             type: 'GET',
+             success: function (data) {
+                var locktime=data.locktime;
+                if(locktime!=null)
+                {
+                   var now = new Date();
+                   var date = new Date(locktime);
+
+                   var tmpdate=now.getTime()-date.getTime();
+                   var leave1=tmpdate%(24*3600*1000);
+                   var hours=Math.floor(leave1/(3600*1000));
+                   locklogin(username,hours);
+                }
+                else
+                {
+                    document.getElementById("divmsg").innerHTML="";
+                    document.getElementById("btn").disabled = false;
+                }
+             },
+             error: function () {
+               alert("异常");
+             }
+         });
 }
 </script>
 </html>
