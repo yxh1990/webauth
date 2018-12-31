@@ -219,17 +219,32 @@
     <script type="text/x-jquery-tmpl" id="sites">
      {{each(i,da) users}}
         <tr>
-          <td>  ${da.name} </td>
-          {{if da.type == 1}}
-              <td style='color:red'> 管理员 </td>
-           {{else}}
-              <td> 普通用户 </td>
-           {{/if}}
-          <td>
-             <a href="#" onclick="deleteuser('${da.name}')">删除</a>
-             &nbsp;&nbsp;
-          </td>
-       </tr>
+          <td> ${da.name} </td>
+          {{if da.type == 1 }}
+             <td>
+               <span style='color:red'> 管理员 </span>
+             </td>
+             <td>
+               <a href="#" onclick="deleteuser('${da.name}')">删除</a>
+               &nbsp;&nbsp;
+             </td>
+          {{else da.type == 0 }}
+             <td>
+                普通用户
+             </td>
+             <td>
+               <a href="#" onclick="deleteuser('${da.name}')">删除</a>
+               &nbsp;&nbsp;
+             </td>
+          {{else da.type == 2 }}
+              <td>
+                <span style='color:orange'>审计用户</span>
+              </td>
+              <td>
+                &nbsp;&nbsp;
+              </td>
+          {{/if}}
+        </tr>
       {{/each}}
    </script>
 

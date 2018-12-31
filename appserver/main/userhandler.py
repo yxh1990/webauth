@@ -109,7 +109,7 @@ def upload_sitesexcel(f):
 	dir_name = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 	sitetxt_path = os.path.join(dir_name,"static","files","sites.xlsx")
 	f.save(sitetxt_path)
-	print("保存文件成功")
+	print("保存excel文件成功")
 
 
 def initexceldir():

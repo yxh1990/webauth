@@ -23,7 +23,23 @@ class Userinfo(db.Model):
         }
         return jsonstr
 
+class UserLog(db.Model):
+    id = db.Column(db.Integer,primary_key=True,autoincrement=True)
+    name = db.Column(db.String(20),nullable=False)
+    action = db.Column(db.String(100),nullable=False)
+    time=db.Column(db.DateTime,nullable=True)
 
+    def __repr__(self):
+        return '<User %r>' % self.name
+
+    def jsonstr(self):
+        jsonstr = {
+            'id': self.id,
+            'name': self.name,
+            'action': self.action,
+            'time': self.time.strftime("%Y-%m-%d %H:%M:%S")
+        }
+        return jsonstr
 
 artist_songs = db.Table('artist_songs',
       db.Column('song_id', db.Integer, db.ForeignKey('songs.id')),

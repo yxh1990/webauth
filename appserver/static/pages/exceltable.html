@@ -64,8 +64,8 @@
                 <a href="#" style="font-size: 15px" data-toggle="modal" data-target="#myModal">欢迎你: <span id="username"></span></a>&nbsp;
                  &nbsp;&nbsp;&nbsp;
                 <span id="days"></span>
-                                    &nbsp;&nbsp;
-                  <a href="/logout" style="color:red">退出登录</a>
+                &nbsp;&nbsp;
+                <a href="/logout" style="color:red">退出登录</a>
             </ul>
 
             <div class="navbar-default sidebar" role="navigation">
@@ -80,8 +80,8 @@
 
         <div id="page-wrapper">
             <div style="text-align:center;margin:15px;font-weight:bold;" id="sitename"></div>
-          <div class="row" style="margin-top:5px;margin-bottom:30px" id="row">
-          </div>
+            <div class="row" style="margin-top:5px;margin-bottom:30px;width:900px;height:100%" id="row">
+            </div>
 
             <div id="div1">
 
@@ -168,8 +168,8 @@
     <script  src="/static/js/highcharts.js"></script>
     <script type="text/x-jquery-tmpl" id="cabinets">
       {{each(i,da) sites}}
-          <div class="col-sm-6 col-md-3" style="height:150px;width:150px">
-            <div class="thumbnail">
+          <div class="col-sm-6 col-md-3" style="height:150px;width:160px;margin-top:10px;margin-bottom:5px">
+            <div class="thumbnail" style="border:0px">
              <img src="/static/images/gz2.png" alt="缩略图" onclick="showdata('${da.guizi}')" style="cursor:pointer;">
               <div class="caption" style="text-align:center;padding:0px">
               {{if i == 0 }}
