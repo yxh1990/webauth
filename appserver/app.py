@@ -35,12 +35,13 @@ def index():
 def main():
 	#打开登录页的时候进行数据库初始化
 	db.create_all()
-	users=Userinfo.query.filter_by(name='admin').first()
+	users=Userinfo.query.filter_by(name='sjzadmin').first()
 	#users = Userinfo.query.filter_by(name='sjz-jx').first()
 	if not users:
-		admin=Userinfo(name='admin',passwd='admin',type=1)
-		loguser=Userinfo(name='sjzuser',passwd='sjzuser',type=2)
-		#admin = Userinfo(name='sjz-jx', passwd='Sjzjx123$%^', type=1)
+		#admin=Userinfo(name='admin',passwd='admin',type=1)
+		#loguser=Userinfo(name='sjzuser',passwd='sjzuser',type=2)
+		admin = Userinfo(name='sjzadmin', passwd='Jxadmin123!', type=1)
+		loguser= Userinfo(name='sjzuser', passwd='Jxuser123!', type=2)
 		db.session.add(admin)
 		db.session.add(loguser)
 		db.session.commit()

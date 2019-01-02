@@ -212,6 +212,12 @@
     <script src="/static/vendor/datatables-responsive/dataTables.responsive.js"></script>
 
     <!-- Custom Theme JavaScript -->
+    <!--
+          jquery template模板中的语法一定要注意空格和非空格
+          1.{{if }} if和else和大括号之间一定不能包含空格
+          2.{{  ==  }}判断等号两边一定要包含空格
+    -->
+
     <script src="/static/dist/js/sb-admin-2.js"></script>
     <script  src="/static/js/config.js"></script>
     <script  src="/static/js/util.js"></script>
@@ -220,28 +226,31 @@
      {{each(i,da) users}}
         <tr>
           <td> ${da.name} </td>
-          {{if da.type == 1 }}
+          {{if da.name == "sjzadmin"}}
              <td>
-               <span style='color:red'> 管理员 </span>
+               <span style='color:red'> 内置管理员 </span>
              </td>
              <td>
-               <a href="#" onclick="deleteuser('${da.name}')">删除</a>
                &nbsp;&nbsp;
              </td>
-          {{else da.type == 0 }}
+          {{else da.name == "sjzuser"}}
              <td>
-                普通用户
+                <span style='color:orange'>内置审计用户</span>
              </td>
              <td>
-               <a href="#" onclick="deleteuser('${da.name}')">删除</a>
                &nbsp;&nbsp;
              </td>
-          {{else da.type == 2 }}
+          {{else}}
               <td>
-                <span style='color:orange'>审计用户</span>
+               {{if da.type == 0}}
+                    普通用户
+               {{else da.type == 1}}
+                   <span style='color:red'> 管理员 </span>
+               {{/if}}
               </td>
               <td>
-                &nbsp;&nbsp;
+                 <a href="#" onclick="deleteuser('${da.name}')">删除</a>
+                 &nbsp;&nbsp;
               </td>
           {{/if}}
         </tr>

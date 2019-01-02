@@ -29,6 +29,10 @@ function setupdatepasswdvalidate()
                             min: 8,
                             max: 20,
                             message: '长度必须在8-20个字符之间'
+                        },
+                         regexp: {
+                            regexp: /^.*(?=.{8,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/,
+                            message: '最少8位,至少包含1个大小写字母,1个数字,1个特殊字符'
                         }
                     }
                 },
@@ -41,6 +45,10 @@ function setupdatepasswdvalidate()
                             min: 8,
                             max: 20,
                             message: '密码的长度必须在8-20个字符之间'
+                        },
+                         regexp: {
+                            regexp: /^.*(?=.{8,})(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*? ]).*$/,
+                            message: '最少8位,至少包含1个大小写字母,1个数字,1个特殊字符'
                         },
                         identical: {
                             field: 'newconfirmPassword',
