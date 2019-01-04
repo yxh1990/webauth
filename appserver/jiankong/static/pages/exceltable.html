@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>后台管理系统</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+     <link href="/static/dist/css/bootstrapValidator.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="/static/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="/static/vendor/datatables-plugins/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="/static/vendor/datatables-responsive/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="/static/dist/css/sb-admin-2.css" rel="stylesheet">
+    <link href="/static/dist/css/fileinput.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <style>
+        #div1{
+            height: 92%;
+            width: 200px;
+            position: absolute;
+            top:8%;
+            right:2px;
+            overflow: hidden;
+            background-color: #f8f8f8;
+            display: none;
+        }
+        .dataline{
+            margin-top: 10px;
+            line-height: 20px;
+            font-size: 15px;
+            margin-left: 15px;
+            font-weight:bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">后台管理系统</a>
+            </div>
+
+            <ul id="header" class="nav navbar-top-links navbar-right" style="margin-right:80px;margin-top:20px">
+
+            </ul>
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div style="text-align:center;margin:15px;font-weight:bold;" id="sitename"></div>
+            <div class="row" style="margin-top:5px;margin-bottom:30px;width:900px;height:100%" id="row">
+            </div>
+
+            <div id="div1">
+
+            </div>
+            <div id="container0" style="width:75%; height:180px; margin:0"></div>
+            <div id="container1" style="width:75%; height:180px; margin:0"></div>
+            <div id="container2" style="width:75%; height:180px; margin:0"></div>
+            <div id="container3" style="width:75%; height:180px; margin:0"></div>
+            <div id="container4" style="width:75%; height:180px; margin:0"></div>
+            <div id="container5" style="width:75%; height:180px; margin:0"></div>
+     </div>
+
+      <!-- /#page-wrapper -->
+      <div id="updatepwd"></div>
+      <div id="footer"></div>
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="/static/vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="/static/dist/js/bootstrapValidator.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="/static/vendor/metisMenu/metisMenu.min.js"></script>
+    <script src="/static/dist/js/fileinput.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="/static/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="/static/vendor/datatables-plugins/dataTables.bootstrap.min.js"></script>
+    <script src="/static/vendor/datatables-responsive/dataTables.responsive.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="/static/dist/js/sb-admin-2.js"></script>
+    <script  src="/static/js/config.js"></script>
+    <script  src="/static/js/util.js"></script>
+    <script  src="/static/js/jquery.tmpl.js"></script>
+    <script  src="/static/js/jquery.cookie.js"></script>
+    <script  src="/static/js/highcharts.js"></script>
+    <script type="text/x-jquery-tmpl" id="cabinets">
+      {{each(i,da) sites}}
+          <div class="col-sm-6 col-md-3" style="height:150px;width:160px;margin-top:10px;margin-bottom:5px">
+            <div class="thumbnail" style="border:0px">
+             <img src="/static/images/gz2.png" alt="缩略图" onclick="showdata('${da.guizi}')" style="cursor:pointer;">
+              <div class="caption" style="text-align:center;padding:0px">
+              {{if i == 0 }}
+                 <p style="color:red">${da.guizi}</p>
+              {{else}}
+                 <p style="color:green">${da.guizi}</p>
+              {{/if}}
+            </div>
+        </div>
+    </div>
+      {{/each}}
+   </script>
+
+ <script language="JavaScript">
+
+    Highcharts.setOptions({
+		global: {
+				useUTC: false
+		}
+     });
+    function activeLastPointToolip(chart)
+    {
+		  var points = chart.series[0].points;
+		  chart.tooltip.refresh(points[points.length -1]);
+    }
+    //var chart = Highcharts.chart('container0', {
+     Highcharts.chart('container0', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.round(Math.random()*100);          // 随机值
+
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '上A实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}()),
+             zones:
+                 [
+                    {
+                         value: 80, //80度以下
+                         color: '#90ed7d',
+                     },
+                     {
+                         value: 90, //80-90度以下
+                         color: '#f7a35c',
+                     },
+                     {
+                         value: 200,  //90-200度以下
+                         color: '#FF0000',
+                     }
+                 ]
+		}]
+     });
+
+     Highcharts.chart('container1', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.round(Math.random()*100);          // 随机值
+
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '上A实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}()),
+             zones:
+                 [
+                     {
+                         value: 80, //80度以下
+                         color: '#90ed7d',
+                     },
+                     {
+                         value: 90, //80-90度以下
+                         color: '#f7a35c',
+                     },
+                     {
+                         value: 200,  //90-200度以下
+                         color: '#FF0000',
+                     }
+                 ]
+		}]
+     });
+
+     Highcharts.chart('container2', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.round(Math.random()*100);         // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '上B实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: Math.random()
+								});
+						}
+						return data;
+				}()),
+              zones:
+                 [
+                     {
+                         value: 80, //80度以下
+                         color: '#90ed7d',
+                     },
+                     {
+                         value: 90, //80-90度以下
+                         color: '#f7a35c',
+                     },
+                     {
+                         value: 200,  //90-200度以下
+                         color: '#FF0000',
+                     }
+                 ]
+		}]
+     });
+
+     Highcharts.chart('container3', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.round(Math.random()*100);          // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '下B实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}()),
+              zones:
+                 [
+                     {
+                         value: 80, //80度以下
+                         color: '#90ed7d',
+                     },
+                     {
+                         value: 90, //80-90度以下
+                         color: '#f7a35c',
+                     },
+                     {
+                         value: 200,  //90-200度以下
+                         color: '#FF0000',
+                     }
+                 ]
+		}]
+     });
+
+     Highcharts.chart('container4', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.round(Math.random()*100);          // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '上C实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}()),
+              zones:
+                 [
+                    {
+                         value: 80, //80度以下
+                         color: '#90ed7d',
+                     },
+                     {
+                         value: 90, //80-90度以下
+                         color: '#f7a35c',
+                     },
+                     {
+                         value: 200,  //90-200度以下
+                         color: '#FF0000',
+                     }
+                 ]
+		}]
+     });
+
+     Highcharts.chart('container5', {
+		chart: {
+				type: 'spline',
+				marginRight: 10,
+				events: {
+						load: function () {
+								var series = this.series[0], chart = this;
+								//activeLastPointToolip(chart);
+								setInterval(function () {
+										var x = (new Date()).getTime(), // 当前时间
+												y = Math.round(Math.random()*100);          // 随机值
+										series.addPoint([x, y], true, true);
+										//activeLastPointToolip(chart);
+								}, 1000);
+						}
+				}
+		},
+		title: {
+				text: '下C实时温度显示'
+		},
+		xAxis: {
+				type: 'datetime',
+				tickPixelInterval: 150
+		},
+		yAxis: {
+				title: {
+						text: null
+				}
+		},
+		tooltip: {
+				formatter: function () {
+						return '<b>' + this.series.name + '</b><br/>' +
+								Highcharts.dateFormat('%Y-%m-%d %H:%M:%S', this.x) + '<br/>' +
+								Highcharts.numberFormat(this.y, 2);
+				}
+		},
+		legend: {
+				enabled: false
+		},
+		series: [{
+				name: '温度',
+				data: (function () {
+						// 生成随机值
+						var data = [],
+								time = (new Date()).getTime(),
+								i;
+						for (i = -19; i <= 0; i += 1) {
+								data.push({
+										x: time + i * 1000,
+										y: 0
+								});
+						}
+						return data;
+				}()),
+              zones:
+                 [
+                    {
+                         value: 80, //80度以下
+                         color: '#90ed7d',
+                     },
+                     {
+                         value: 90, //80-90度以下
+                         color: '#f7a35c',
+                     },
+                     {
+                         value: 200,  //90-200度以下
+                         color: '#FF0000',
+                     }
+                 ]
+		}]
+     });
+
+    </script>
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+   var sitedata;
+   function getsites(sitename)
+   {
+      $.ajax({
+          url:restapi+'/site',
+          type:'GET',
+          dataType:'json',
+          crossDomain: true,
+          xhrFields: {
+             withCredentials: true
+          },
+          success:function(data)
+          {
+              for(var i=0;i<data.sites.length;i++)
+              {
+                  if (data.sites[i]["name"] == sitename)
+                  {
+                      sitedata = data.sites[i];
+                    $("#cabinets").tmpl({"sites":sitedata["data"]}).appendTo('#row');
+                      //console.log(sitedata);
+                  }
+              }
+             $('#dataTables-example').DataTable({
+                responsive: true
+             });
+          },
+          error:function()
+          {
+              alert("获取数据异常");
+          }
+       });
+    }
+
+    $(document).ready(function() {
+        var sitename = getQueryString("sitename");
+        $("#sitename").html(sitename);
+        getsites(sitename);
+        getusernavhtml();
+        getfooterhtml();
+        getheaderhtml();
+        setupdatepasswdvalidate();
+        $(".highcharts-credits").hide();
+    });
+
+    function loadnavcallback()
+    {
+     $("#navul").children().eq(0).css("background-color","#eeeeee");
+    }
+
+    timer="";
+    function showdata(guizi)
+    {
+        var guiziarray=sitedata["data"];
+        for (var t=0;t<guiziarray.length;t++)
+        {
+            if(guiziarray[t].guizi==guizi)
+            {
+              guizidata=guiziarray[t]["items"];
+            }
+        }
+
+        var initbutton="&nbsp;<button type=\"button\" class=\"btn btn-info\" style='width:100%;margin-bottom:3px' onclick=\"closeright()\" >隐藏详细</button><button type=\"button\" class=\"btn btn-danger\" style='width:100%' >"+name+"监控信息</button>";
+        var datahtml="";
+        for(var i=0;i<guizidata.length;i++)
+        {
+            var temp=Math.floor(Math.random()*100+1);
+            if (temp > 85)
+            {
+                 datahtml+="<p class='dataline' style='color:red'>"+guizidata[i]["po"]+":&nbsp;&nbsp;"+temp+"°C</p>"
+            }
+            else
+            {
+                datahtml+="<p class='dataline'>"+guizidata[i]["po"]+":&nbsp;&nbsp;"+temp+"°C</p>"
+            }
+        }
+        $("#div1").html(initbutton+datahtml);
+        $("#div1").show();
+
+        if(timer)
+        {
+          window.clearInterval(timer);
+        }
+        timer=setInterval(showdata,1000,guizi);
+    }
+    function showdatabak(img)
+    {
+        var tags = $(img).attr("tags");
+        var name =$(img).attr("tagname");
+        tags = tags.split(",");
+        var initbutton=" &nbsp;<button type=\"button\" class=\"btn btn-info\" style='width:100%;margin-bottom:3px' onclick=\"closeright()\" >隐藏详细</button><button type=\"button\" class=\"btn btn-danger\" style='width:100%' >"+name+"监控信息</button>";
+        var datahtml="";
+        for(var i=0;i<tags.length;i++)
+        {
+           datahtml+="<p class='dataline'>"+tags[i]+":&nbsp;&nbsp;"+Math.floor(Math.random()*100+1);+"</p>"
+        }
+        $("#div1").html(initbutton+datahtml);
+        $("#div1").show();
+    }
+
+    function closeright()
+    {
+         $("#div1").empty();
+         $("#div1").hide();
+    }
+
+    </script>
+</body>
+
+</html>
