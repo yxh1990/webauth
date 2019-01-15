@@ -9,11 +9,13 @@ from jiankong.main import userhandler
 import os
 from urllib.parse import unquote,quote
 import json
+import requests
 
 
 from datetime import date,datetime
 from datetime import timedelta
 import time
+import settings
 
 
 from jiankong.model.appmodel import UserLog
@@ -177,6 +179,20 @@ def getlocktime():
 	else:
 		locktime=None
 	return jsonify({'username':username,'locktime':locktime})
+
+
+@app.route('/realdata',methods=['GET'])
+def getrealdata():
+	sitename = request.args.get("sitename")
+	url="%sname=%s" %(settings.dataurl,sitename)
+	#print(url)
+	try:
+		response = requests.get(url)
+		if response.status_code == 200:
+			res = json.loads(response.text)
+			return jsonify(res)
+	except:
+		print("请求%s出现异常" % url)
 
 
 @app.before_first_request

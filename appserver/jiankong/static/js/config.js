@@ -3,6 +3,7 @@ var RestConfig = {
   "restport":"5000"
 };
 
+
 var restapi ="http://"+RestConfig.restip+":"+RestConfig.restport;
 function getadminnavhtml()
 {

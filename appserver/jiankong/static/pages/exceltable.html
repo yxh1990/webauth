@@ -2,17 +2,16 @@
 <html lang="en">
 
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
 
     <title>后台管理系统</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+     <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
      <link href="/static/dist/css/bootstrapValidator.min.css" rel="stylesheet">
 
     <!-- MetisMenu CSS -->
@@ -31,7 +30,7 @@
     <!-- Custom Fonts -->
     <link href="/static/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <style>
-        #div1{
+         #div1{
             height: 92%;
             width: 200px;
             position: absolute;
@@ -39,7 +38,6 @@
             right:2px;
             overflow: hidden;
             background-color: #f8f8f8;
-            display: none;
         }
         .dataline{
             margin-top: 10px;
@@ -123,12 +121,12 @@
       {{each(i,da) sites}}
           <div class="col-sm-6 col-md-3" style="height:150px;width:160px;margin-top:10px;margin-bottom:5px">
             <div class="thumbnail" style="border:0px">
-             <img src="/static/images/gz2.png" alt="缩略图" onclick="showdata('${da.guizi}')" style="cursor:pointer;">
+             <img src="/static/images/gz2.png" alt="缩略图" onclick="showdata('${da.guizi}',${i},this,true)" style="cursor:pointer;" />
               <div class="caption" style="text-align:center;padding:0px">
               {{if i == 0 }}
-                 <p style="color:red">${da.guizi}</p>
+                 <p style='color:red'>${da.guizi}</p>
               {{else}}
-                 <p style="color:green">${da.guizi}</p>
+                 <p>${da.guizi}</p>
               {{/if}}
             </div>
         </div>
@@ -148,21 +146,123 @@
 		  var points = chart.series[0].points;
 		  chart.tooltip.refresh(points[points.length -1]);
     }
-    //var chart = Highcharts.chart('container0', {
-     Highcharts.chart('container0', {
+
+    </script>
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+   var sitedata="";
+   var choiceguizi="";
+   function getsites(sitename)
+   {
+      $.ajax({
+          url:restapi+'/site',
+          type:'GET',
+          dataType:'json',
+          crossDomain: true,
+          xhrFields: {
+             withCredentials: true
+          },
+          success:function(data)
+          {
+              for(var i=0;i<data.sites.length;i++)
+              {
+                  if (data.sites[i]["name"] == sitename)
+                  {
+                      sitedata = data.sites[i];
+                      $("#cabinets").tmpl({"sites":sitedata["data"]}).appendTo('#row');
+                      //加载第一个柜子的曲线
+                      choiceguizi=sitedata["data"][0];
+                      createLines();
+                      showdata(sitedata["data"][0]["guizi"],0,null,false);
+                  }
+              }
+          },
+          error:function()
+          {
+              alert("获取数据异常");
+          }
+       });
+    }
+
+    var temps=[0,0,0,0,0,0];
+    function getTemps()
+    {
+       showguizidata();
+       return temps;
+    }
+
+    var sitename="";
+    function showguizidata()
+    {
+       $.ajax({
+          url:restapi+'/realdata',
+          type:'GET',
+          data:{"sitename":sitename},
+          dataType:'json',
+          success:function(realdata)
+          {
+               temps=[];
+               for (j=0;j<realdata["data"]["items"].length;j++)
+                    {
+                      if (choiceguizi["items"][0].pv == realdata["data"]["items"][j]["address"]) {
+                          temps.push(realdata["data"]["items"][j]["temperature"]);
+                      }
+                       if (choiceguizi["items"][1].pv == realdata["data"]["items"][j]["address"]) {
+                          temps.push(realdata["data"]["items"][j]["temperature"]);
+                      }
+                      if (choiceguizi["items"][2].pv == realdata["data"]["items"][j]["address"]) {
+                          temps.push(realdata["data"]["items"][j]["temperature"]);
+                      }
+                      if (choiceguizi["items"][3].pv == realdata["data"]["items"][j]["address"]) {
+                          temps.push(realdata["data"]["items"][j]["temperature"]);
+                      }
+                      if (choiceguizi["items"][4].pv == realdata["data"]["items"][j]["address"]) {
+                          temps.push(realdata["data"]["items"][j]["temperature"]);
+                      }
+                      if (choiceguizi["items"][5].pv == realdata["data"]["items"][j]["address"]) {
+                          temps.push(realdata["data"]["items"][j]["temperature"]);
+                      }
+                    }
+          },
+          error:function()
+          {
+              alert("获取数据异常");
+          }
+       });
+    }
+
+    $(document).ready(function() {
+        sitename = getQueryString("sitename");
+        $("#sitename").html(sitename);
+        getsites(sitename);
+        getusernavhtml();
+        getfooterhtml();
+        getheaderhtml();
+        setupdatepasswdvalidate();
+    });
+
+    var a1="";
+    var a2="";
+    var b1="";
+    var b2="";
+    var c1="";
+    var c2="";
+    function createLines()
+    {
+        var currenttemp="";
+        Highcharts.chart('container0', {
 		chart: {
 				type: 'spline',
 				marginRight: 10,
 				events: {
 						load: function () {
 								var series = this.series[0], chart = this;
-								//activeLastPointToolip(chart);
-								setInterval(function () {
+                                a1=setInterval(function () {
+								       currenttemp=getTemps();
 										var x = (new Date()).getTime(), // 当前时间
-												y = Math.round(Math.random()*100);          // 随机值
+												y = currenttemp[0];
 
 										series.addPoint([x, y], true, true);
-										//activeLastPointToolip(chart);
 								}, 1000);
 						}
 				}
@@ -189,6 +289,9 @@
 		legend: {
 				enabled: false
 		},
+        credits: {
+		     enabled: false
+        },
 		series: [{
 				name: '温度',
 				data: (function () {
@@ -221,27 +324,25 @@
                  ]
 		}]
      });
-
-     Highcharts.chart('container1', {
+        Highcharts.chart('container1', {
 		chart: {
 				type: 'spline',
 				marginRight: 10,
 				events: {
 						load: function () {
 								var series = this.series[0], chart = this;
-								//activeLastPointToolip(chart);
-								setInterval(function () {
+                                a2=setInterval(function () {
+								       currenttemp=getTemps();
 										var x = (new Date()).getTime(), // 当前时间
-												y = Math.round(Math.random()*100);          // 随机值
+												y = currenttemp[1];
 
 										series.addPoint([x, y], true, true);
-										//activeLastPointToolip(chart);
 								}, 1000);
 						}
 				}
 		},
 		title: {
-				text: '上A实时温度显示'
+				text: '下A实时温度显示'
 		},
 		xAxis: {
 				type: 'datetime',
@@ -262,6 +363,9 @@
 		legend: {
 				enabled: false
 		},
+        credits: {
+		     enabled: false
+        },
 		series: [{
 				name: '温度',
 				data: (function () {
@@ -279,7 +383,7 @@
 				}()),
              zones:
                  [
-                     {
+                    {
                          value: 80, //80度以下
                          color: '#90ed7d',
                      },
@@ -294,20 +398,19 @@
                  ]
 		}]
      });
-
-     Highcharts.chart('container2', {
+        Highcharts.chart('container2', {
 		chart: {
 				type: 'spline',
 				marginRight: 10,
 				events: {
 						load: function () {
 								var series = this.series[0], chart = this;
-								//activeLastPointToolip(chart);
-								setInterval(function () {
+                                b1=setInterval(function () {
+								       currenttemp=getTemps();
 										var x = (new Date()).getTime(), // 当前时间
-												y = Math.round(Math.random()*100);         // 随机值
+												y = currenttemp[2];
+
 										series.addPoint([x, y], true, true);
-										//activeLastPointToolip(chart);
 								}, 1000);
 						}
 				}
@@ -334,6 +437,9 @@
 		legend: {
 				enabled: false
 		},
+        credits: {
+		     enabled: false
+        },
 		series: [{
 				name: '温度',
 				data: (function () {
@@ -344,14 +450,14 @@
 						for (i = -19; i <= 0; i += 1) {
 								data.push({
 										x: time + i * 1000,
-										y: Math.random()
+										y: 0
 								});
 						}
 						return data;
 				}()),
-              zones:
+             zones:
                  [
-                     {
+                    {
                          value: 80, //80度以下
                          color: '#90ed7d',
                      },
@@ -366,20 +472,19 @@
                  ]
 		}]
      });
-
-     Highcharts.chart('container3', {
+        Highcharts.chart('container3', {
 		chart: {
 				type: 'spline',
 				marginRight: 10,
 				events: {
 						load: function () {
 								var series = this.series[0], chart = this;
-								//activeLastPointToolip(chart);
-								setInterval(function () {
+                                b2=setInterval(function () {
+								       currenttemp=getTemps();
 										var x = (new Date()).getTime(), // 当前时间
-												y = Math.round(Math.random()*100);          // 随机值
+												y = currenttemp[3];
+
 										series.addPoint([x, y], true, true);
-										//activeLastPointToolip(chart);
 								}, 1000);
 						}
 				}
@@ -406,6 +511,9 @@
 		legend: {
 				enabled: false
 		},
+        credits: {
+		     enabled: false
+        },
 		series: [{
 				name: '温度',
 				data: (function () {
@@ -421,9 +529,9 @@
 						}
 						return data;
 				}()),
-              zones:
+             zones:
                  [
-                     {
+                    {
                          value: 80, //80度以下
                          color: '#90ed7d',
                      },
@@ -438,20 +546,19 @@
                  ]
 		}]
      });
-
-     Highcharts.chart('container4', {
+        Highcharts.chart('container4', {
 		chart: {
 				type: 'spline',
 				marginRight: 10,
 				events: {
 						load: function () {
 								var series = this.series[0], chart = this;
-								//activeLastPointToolip(chart);
-								setInterval(function () {
+                                c1=setInterval(function () {
+								       currenttemp=getTemps();
 										var x = (new Date()).getTime(), // 当前时间
-												y = Math.round(Math.random()*100);          // 随机值
+												y = currenttemp[4];
+
 										series.addPoint([x, y], true, true);
-										//activeLastPointToolip(chart);
 								}, 1000);
 						}
 				}
@@ -478,6 +585,9 @@
 		legend: {
 				enabled: false
 		},
+        credits: {
+		     enabled: false
+        },
 		series: [{
 				name: '温度',
 				data: (function () {
@@ -493,7 +603,7 @@
 						}
 						return data;
 				}()),
-              zones:
+             zones:
                  [
                     {
                          value: 80, //80度以下
@@ -510,20 +620,19 @@
                  ]
 		}]
      });
-
-     Highcharts.chart('container5', {
+        Highcharts.chart('container5', {
 		chart: {
 				type: 'spline',
 				marginRight: 10,
 				events: {
 						load: function () {
 								var series = this.series[0], chart = this;
-								//activeLastPointToolip(chart);
-								setInterval(function () {
+                                c2=setInterval(function () {
+								       currenttemp=getTemps();
 										var x = (new Date()).getTime(), // 当前时间
-												y = Math.round(Math.random()*100);          // 随机值
+												y = currenttemp[5];
+
 										series.addPoint([x, y], true, true);
-										//activeLastPointToolip(chart);
 								}, 1000);
 						}
 				}
@@ -550,6 +659,9 @@
 		legend: {
 				enabled: false
 		},
+        credits: {
+		     enabled: false
+        },
 		series: [{
 				name: '温度',
 				data: (function () {
@@ -565,7 +677,7 @@
 						}
 						return data;
 				}()),
-              zones:
+             zones:
                  [
                     {
                          value: 80, //80度以下
@@ -582,63 +694,48 @@
                  ]
 		}]
      });
-
-    </script>
-    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
-    <script>
-   var sitedata;
-   function getsites(sitename)
-   {
-      $.ajax({
-          url:restapi+'/site',
-          type:'GET',
-          dataType:'json',
-          crossDomain: true,
-          xhrFields: {
-             withCredentials: true
-          },
-          success:function(data)
-          {
-              for(var i=0;i<data.sites.length;i++)
-              {
-                  if (data.sites[i]["name"] == sitename)
-                  {
-                      sitedata = data.sites[i];
-                    $("#cabinets").tmpl({"sites":sitedata["data"]}).appendTo('#row');
-                      //console.log(sitedata);
-                  }
-              }
-             $('#dataTables-example').DataTable({
-                responsive: true
-             });
-          },
-          error:function()
-          {
-              alert("获取数据异常");
-          }
-       });
     }
-
-    $(document).ready(function() {
-        var sitename = getQueryString("sitename");
-        $("#sitename").html(sitename);
-        getsites(sitename);
-        getusernavhtml();
-        getfooterhtml();
-        getheaderhtml();
-        setupdatepasswdvalidate();
-        $(".highcharts-credits").hide();
-    });
 
     function loadnavcallback()
     {
-     $("#navul").children().eq(0).css("background-color","#eeeeee");
+        $("#navul").children().eq(0).css("background-color","#eeeeee");
     }
 
-    timer="";
-    function showdata(guizi)
+    var timer="";
+    function showdata(guizi,index,obj,clearflag)
     {
+        $(".caption").find("p").css("color","");
+        if (obj)
+        {
+             $(obj).next().children().eq(0).css("color", "red");
+        }
+        else {
+             $(".caption").eq(0).find("p").css("color","red");
+        }
+
         var guiziarray=sitedata["data"];
+        choiceguizi =sitedata["data"][index];
+
+
+        if(a1 && clearflag) //切换到新的柜子曲线
+        {
+           clearInterval(a1);
+           clearInterval(a2);
+           clearInterval(b1);
+           clearInterval(b2);
+           clearInterval(c1);
+           clearInterval(c2);
+           $("#container0").highcharts().destroy();
+           $("#container1").highcharts().destroy();
+           $("#container2").highcharts().destroy();
+           $("#container3").highcharts().destroy();
+           $("#container4").highcharts().destroy();
+           $("#container5").highcharts().destroy();
+           createLines();
+           clearflag=false;
+        }
+
+
         for (var t=0;t<guiziarray.length;t++)
         {
             if(guiziarray[t].guizi==guizi)
@@ -647,51 +744,30 @@
             }
         }
 
-        var initbutton="&nbsp;<button type=\"button\" class=\"btn btn-info\" style='width:100%;margin-bottom:3px' onclick=\"closeright()\" >隐藏详细</button><button type=\"button\" class=\"btn btn-danger\" style='width:100%' >"+name+"监控信息</button>";
+        var initbutton="&nbsp;<button type=\"button\" class=\"btn btn-danger\" style='width:100%'>监控信息</button>";
         var datahtml="";
+        guizidata=["上A","下A","上B","下B","上C","下C"];
         for(var i=0;i<guizidata.length;i++)
         {
-            var temp=Math.floor(Math.random()*100+1);
-            if (temp > 85)
+            if (temps[i]==undefined) temps[i]="获取异常";
+            if (temps[i] > 85)
             {
-                 datahtml+="<p class='dataline' style='color:red'>"+guizidata[i]["po"]+":&nbsp;&nbsp;"+temp+"°C</p>"
+                 datahtml+="<p class='dataline' style='color:red'>"+guizidata[i]+":&nbsp;&nbsp;"+temps[i]+"°C</p>"
             }
             else
             {
-                datahtml+="<p class='dataline'>"+guizidata[i]["po"]+":&nbsp;&nbsp;"+temp+"°C</p>"
+                datahtml+="<p class='dataline'>"+guizidata[i]+":&nbsp;&nbsp;"+temps[i]+"°C</p>"
             }
         }
+
         $("#div1").html(initbutton+datahtml);
-        $("#div1").show();
 
         if(timer)
         {
           window.clearInterval(timer);
         }
-        timer=setInterval(showdata,1000,guizi);
+        timer=setInterval(showdata,1000,guizi,index,obj,clearflag);
     }
-    function showdatabak(img)
-    {
-        var tags = $(img).attr("tags");
-        var name =$(img).attr("tagname");
-        tags = tags.split(",");
-        var initbutton=" &nbsp;<button type=\"button\" class=\"btn btn-info\" style='width:100%;margin-bottom:3px' onclick=\"closeright()\" >隐藏详细</button><button type=\"button\" class=\"btn btn-danger\" style='width:100%' >"+name+"监控信息</button>";
-        var datahtml="";
-        for(var i=0;i<tags.length;i++)
-        {
-           datahtml+="<p class='dataline'>"+tags[i]+":&nbsp;&nbsp;"+Math.floor(Math.random()*100+1);+"</p>"
-        }
-        $("#div1").html(initbutton+datahtml);
-        $("#div1").show();
-    }
-
-    function closeright()
-    {
-         $("#div1").empty();
-         $("#div1").hide();
-    }
-
     </script>
 </body>
-
 </html>
